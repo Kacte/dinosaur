@@ -2,7 +2,7 @@ import pygame
 import os
 
 # Global Constants
-TITLE = "Chrome Dino Runner"
+TITLE = "Chrome Demon Slayer Game"
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
 FPS = 30
@@ -19,6 +19,8 @@ DINO_DEAD = pygame.image.load(os.path.join(IMG_DIR, "Dino/TanjiroDead.png"))
 RUNNING = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/Run/TanjiroRun1.png")),
     pygame.image.load(os.path.join(IMG_DIR, "Dino/Run/TanjiroRun2.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/Run/DinoRun1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/Run/DinoRun2.png")),
 ]
 RUNNING_SHIELD = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/Run/DinoRunShield1.png")),
@@ -33,6 +35,8 @@ RUNNING_HAMMER = [
 DUCKING = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/Duck/TanjiroDuck1.png")),
     pygame.image.load(os.path.join(IMG_DIR, "Dino/Duck/TanjiroDuck2.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/Duck/DinoDuck1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/Duck/DinoDuck2.png")),
 ]
 DUCKING_SHIELD = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/Duck/DinoDuckShield1.png")),
@@ -63,10 +67,23 @@ LARGE_CACTUS = [
     pygame.image.load(os.path.join(IMG_DIR, "Cactus/LargeCactus2.png")),
     pygame.image.load(os.path.join(IMG_DIR, "Cactus/LargeCactus3.png")),
 ]
+TREE = [
+    pygame.image.load(os.path.join(IMG_DIR, "Cactus/SmallTree1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Cactus/SmallTree2.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Cactus/SmallTree3.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Cactus/LargeTree1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Cactus/LargeTree2.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Cactus/LargeTree3.png")),
+]
 BIRD = [
     pygame.image.load(os.path.join(IMG_DIR, "Bird/Bird1.png")),
     pygame.image.load(os.path.join(IMG_DIR, "Bird/Bird2.png")),
 ]
+
+DEMON = [    
+    pygame.image.load(os.path.join(IMG_DIR, "Bird/Demon1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Bird/Demon2.png")),
+    ]
 
 # Doodads
 CLOUD = pygame.image.load(os.path.join(IMG_DIR, "Other/Cloud.png"))
@@ -75,7 +92,7 @@ CLOUD = pygame.image.load(os.path.join(IMG_DIR, "Other/Cloud.png"))
 SHIELD = pygame.image.load(os.path.join(IMG_DIR, "Other/Shield.png"))
 HAMMER = pygame.image.load(os.path.join(IMG_DIR, "Other/Hammer.png"))
 
-BG = pygame.image.load(os.path.join(IMG_DIR, "Other/Track.png"))
+BG = pygame.image.load(os.path.join(IMG_DIR, "Other/TanjiroTrack.png"))
 HEART = pygame.image.load(os.path.join(IMG_DIR, "Other/SmallHeart.png"))
 
 DEFAULT_TYPE = "default"
