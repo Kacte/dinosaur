@@ -1,9 +1,11 @@
 import pygame
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, LOGO
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, LOGO, DEFAULT_TYPE, BG2
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
+from dino_runner.components.power_ups.power_up_manager import PowerUpManager
 from dino_runner.utils.text_utils import text_utils
+
 
 
 class Game:
@@ -17,11 +19,13 @@ class Game:
         self.running = False
         self.game_speed = 20
         self.score = 0
+        self.high_score = 0
         self.death_count = 0
         self.x_pos_bg = 0
         self.y_pos_bg = 0
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
+        self.power_up_manager = PowerUpManager()
     
     def execute(self):
         self.running = True
@@ -37,6 +41,7 @@ class Game:
         self.game_speed = 20
         self.score = 0
         self.obstacle_manager.reset_obstacles()
+        self.power_up_manager.reset_power_ups()
         while self.playing:
             self.events()
             self.update()
@@ -52,12 +57,18 @@ class Game:
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
         self.obstacle_manager.update(self)
+        self.power_up_manager.update(self)
         self.update_score()
 
     def update_score(self):
         self.score += 1
         if self.score % 100 == 0:
-            self.game_speed += 1
+            self.game_speed += 2
+        self.update_high_score()
+
+    def update_high_score(self):
+        if self.score >= self.high_score:
+            self.high_score = self.score
 
     def draw(self):
         self.clock.tick(FPS)
@@ -65,7 +76,9 @@ class Game:
         self.draw_background()
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
+        self.power_up_manager.draw(self.screen)
         self.draw_score()
+        self.draw_power_up_time()
         pygame.display.update()
         pygame.display.flip()
 
@@ -85,33 +98,52 @@ class Game:
                    pos_y_center=100
                    )
 
-    
-    def draw_death_count(self):
-        text_utils(f"Death Count:{self.death_count}",
-                   self.screen,
-                   pos_x_center=175,
-                   pos_y_center=100
-                   )
-
+    def draw_power_up_time(self):
+        if self.player.has_power_up:
+            time_to_show = round((self.player.power_up_time - pygame.time.get_ticks()) / 1000, 1)
+            if time_to_show >= 0:
+                text_utils(
+                    f"{self.player.type.capitalize()} enabled for {time_to_show} seconds",
+                    self.screen,
+                    font_size=18,
+                    pos_x_center=500,
+                    pos_y_center=40
+                )
+            else:
+                self.player.has_power_up = False
+                self.player.type = DEFAULT_TYPE
 
     def show_menu(self):
-        self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg))
+        self.screen.blit(BG2, (0, 0))
         half_screen_height = SCREEN_HEIGHT // 2
         half_screen_width = SCREEN_WIDTH // 2
 
-        if self.death_count == 0:  # Tela de inicio
-            self.screen.blit(LOGO, (half_screen_width - 20, half_screen_height - 140))
+        if self.death_count == 0:
+            self.screen.blit(LOGO, (half_screen_width - 100, half_screen_height - 50))
             text_utils("Press any key to start",
                    self.screen,
                    pos_x_center=half_screen_width,
-                   pos_y_center=half_screen_height
+                   pos_y_center=half_screen_height + 200
                    )
 
-        else:  # Tela de restart
-            self.draw_score()
-            self.draw_death_count()
-            self.screen.blit(LOGO, (half_screen_width - 180, half_screen_height - 200))
+        else:
+            self.screen.blit(LOGO, (half_screen_width - 100, half_screen_height - 50))
             text_utils("Press any key to restart",
+                   self.screen,
+                   pos_x_center=half_screen_width,
+                   pos_y_center=half_screen_height + 250
+                   )
+            text_utils(f"Score: {self.score}",
+                   self.screen,
+                   pos_x_center=675,
+                   pos_y_center=225
+                   )
+            text_utils(f"Death Count: {self.death_count}",
+                   self.screen,
+                   pos_x_center=425,
+                   pos_y_center=225
+                   )
+            text_utils(f"High score: {self.high_score}",
                    self.screen,
                    pos_x_center=half_screen_width,
                    pos_y_center=half_screen_height + 200

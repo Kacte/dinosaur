@@ -23,8 +23,8 @@ RUNNING = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/Run/DinoRun2.png")),
 ]
 RUNNING_SHIELD = [
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/Run/DinoRunShield1.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/Run/DinoRunShield2.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/Run/TanjiroShieldRun1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/Run/TanjiroShieldRun2.png")),
 ]
 RUNNING_HAMMER = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/Run/DinoRunHammer1.png")),
@@ -39,8 +39,8 @@ DUCKING = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/Duck/DinoDuck2.png")),
 ]
 DUCKING_SHIELD = [
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/Duck/DinoDuckShield1.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/Duck/DinoDuckShield2.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/Duck/TanjiroShieldDuck1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/Duck/TanjiroShieldDuck2.png")),
 ]
 DUCKING_HAMMER = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/Duck/DinoDuckHammer1.png")),
@@ -50,7 +50,7 @@ DUCKING_HAMMER = [
 # Jump
 JUMPING = pygame.image.load(os.path.join(IMG_DIR, "Dino/Jump/TanjiroJump.png"))
 JUMPING_SHIELD = pygame.image.load(
-    os.path.join(IMG_DIR, "Dino/Jump/DinoJumpShield.png")
+    os.path.join(IMG_DIR, "Dino/Jump/TanjiroShieldJump.png")
 )
 JUMPING_HAMMER = pygame.image.load(
     os.path.join(IMG_DIR, "Dino/Jump/DinoJumpHammer.png")
@@ -94,6 +94,7 @@ HAMMER = pygame.image.load(os.path.join(IMG_DIR, "Other/Hammer.png"))
 
 LOGO = pygame.image.load(os.path.join(IMG_DIR, "Other/Logo.png"))
 BG = pygame.image.load(os.path.join(IMG_DIR, "Other/TanjiroTrack.png"))
+BG2 = pygame.image.load(os.path.join(IMG_DIR, "Other/DemonSlayerGame.png"))
 HEART = pygame.image.load(os.path.join(IMG_DIR, "Other/SmallHeart.png"))
 
 DEFAULT_TYPE = "default"

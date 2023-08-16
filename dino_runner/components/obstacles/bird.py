@@ -8,4 +8,4 @@ class Bird(Obstacle):
         self.type = random.randint(0, 1)
         super().__init__(image, self.type)
         
-        self.rect.y = random.choice([290, 270])
+        self.rect.y = random.choice([295, 274])

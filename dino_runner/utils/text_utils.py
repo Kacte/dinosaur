@@ -2,12 +2,11 @@ import pygame
 
 from dino_runner.utils.constants import SCREEN_HEIGHT, SCREEN_WIDTH
 
-font_style = "freesansbold.ttf"
-font_size = 22
-text_color = (255,250,250)
-
 def text_utils (message,
                   screen,
+                  font_style = "freesansbold.ttf",
+                  font_size=22,
+                  text_color=(255,250,250),
                   pos_x_center=SCREEN_WIDTH//2,
                   pos_y_center=SCREEN_HEIGHT//2
 ):
