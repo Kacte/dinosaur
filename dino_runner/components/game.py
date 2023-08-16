@@ -1,8 +1,9 @@
 import pygame
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, LOGO
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
+from dino_runner.utils.text_utils import text_utils
 
 
 class Game:
@@ -13,29 +14,50 @@ class Game:
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.playing = False
+        self.running = False
         self.game_speed = 20
+        self.score = 0
+        self.death_count = 0
         self.x_pos_bg = 0
         self.y_pos_bg = 0
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
+    
+    def execute(self):
+        self.running = True
+        while self.running:
+            if not self.playing:
+                self.show_menu()
+        pygame.display.quit()
+        pygame.quit()
+
 
     def run(self):
         self.playing = True
+        self.game_speed = 20
+        self.score = 0
+        self.obstacle_manager.reset_obstacles()
         while self.playing:
             self.events()
             self.update()
             self.draw()
-        pygame.quit()
 
     def events(self):
         for event in pygame.event.get():
-            if event.type == pygame.quit:
+            if event.type == pygame.QUIT:
                 self.playing = False
+                self.running = False
 
     def update(self):
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
         self.obstacle_manager.update(self)
+        self.update_score()
+
+    def update_score(self):
+        self.score += 1
+        if self.score % 100 == 0:
+            self.game_speed += 1
 
     def draw(self):
         self.clock.tick(FPS)
@@ -43,6 +65,7 @@ class Game:
         self.draw_background()
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
+        self.draw_score()
         pygame.display.update()
         pygame.display.flip()
 
@@ -54,3 +77,52 @@ class Game:
             self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
             self.x_pos_bg = 0
         self.x_pos_bg -= self.game_speed
+
+    def draw_score(self):
+        text_utils(f"Score: {self.score}",
+                   self.screen,
+                   pos_x_center=970,
+                   pos_y_center=100
+                   )
+
+    
+    def draw_death_count(self):
+        text_utils(f"Death Count:{self.death_count}",
+                   self.screen,
+                   pos_x_center=175,
+                   pos_y_center=100
+                   )
+
+
+    def show_menu(self):
+        self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg))
+        half_screen_height = SCREEN_HEIGHT // 2
+        half_screen_width = SCREEN_WIDTH // 2
+
+        if self.death_count == 0:  # Tela de inicio
+            self.screen.blit(LOGO, (half_screen_width - 20, half_screen_height - 140))
+            text_utils("Press any key to start",
+                   self.screen,
+                   pos_x_center=half_screen_width,
+                   pos_y_center=half_screen_height
+                   )
+
+        else:  # Tela de restart
+            self.draw_score()
+            self.draw_death_count()
+            self.screen.blit(LOGO, (half_screen_width - 180, half_screen_height - 200))
+            text_utils("Press any key to restart",
+                   self.screen,
+                   pos_x_center=half_screen_width,
+                   pos_y_center=half_screen_height + 200
+                   )
+        pygame.display.update()
+        self.handle_events_on_menu()
+
+    def handle_events_on_menu(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.playing = False
+                self.running = False
+            elif event.type == pygame.KEYDOWN:
+                self.run()
