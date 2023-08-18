@@ -1,5 +1,4 @@
 import pygame
-from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING
 from dino_runner.utils.constants import (
     RUNNING,
     JUMPING,
@@ -9,6 +8,7 @@ from dino_runner.utils.constants import (
     DUCKING_SHIELD,
     DEFAULT_TYPE,
     SHIELD_TYPE,
+    FREEZE_TYPE,
 )
 from pygame.sprite import Sprite
 
@@ -21,14 +21,17 @@ JUMP_VEL = 8.5
 DUCK_IMG = {
     DEFAULT_TYPE: DUCKING,
     SHIELD_TYPE: DUCKING_SHIELD,
+    FREEZE_TYPE: DUCKING,
 }
 JUMP_IMG = {
     DEFAULT_TYPE: JUMPING,
     SHIELD_TYPE: JUMPING_SHIELD,
+    FREEZE_TYPE: JUMPING,
 }
 RUN_IMG = {
     DEFAULT_TYPE: RUNNING,
     SHIELD_TYPE: RUNNING_SHIELD,
+    FREEZE_TYPE: RUNNING,
 }
 
 
@@ -49,6 +52,7 @@ class Dinosaur(Sprite):
     def setup_state(self):
         self.has_power_up = False
         self.shield = False
+        self.freeze = False
         self.show_test = False
         self.power_up_time = 0
 
@@ -60,7 +64,7 @@ class Dinosaur(Sprite):
         elif self.dino_duck:
             self.duck()
 
-        if user_input[pygame.K_UP] and not self.dino_jump:
+        if user_input[pygame.K_UP] or user_input[pygame.K_SPACE] and not self.dino_jump:
             self.dino_jump = True
             self.dino_run = False
             self.dino_duck = False

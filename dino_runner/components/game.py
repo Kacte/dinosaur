@@ -1,9 +1,9 @@
 import pygame
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, LOGO, DEFAULT_TYPE, BG2
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, LOGO, DEFAULT_TYPE, BG2, SHIELD_TYPE
 from dino_runner.components.dinosaur import Dinosaur
-from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.power_ups.power_up_manager import PowerUpManager
+from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.utils.text_utils import text_utils
 
 
@@ -30,22 +30,32 @@ class Game:
     def execute(self):
         self.running = True
         while self.running:
+            self.music()
             if not self.playing:
                 self.show_menu()
         pygame.display.quit()
         pygame.quit()
 
-
     def run(self):
         self.playing = True
         self.game_speed = 20
         self.score = 0
+        self.player.type = DEFAULT_TYPE
+        self.player.power_up_time = 0
         self.obstacle_manager.reset_obstacles()
         self.power_up_manager.reset_power_ups()
         while self.playing:
             self.events()
             self.update()
             self.draw()
+    
+    def music(self):
+        if self.running:
+            pygame.mixer.init() 
+            pygame.mixer.music.load("dinosaur/dino_runner/assets/Music/fundo.mp3")
+            pygame.mixer.music.play(-1)
+        else:
+            pygame.mixer.music.stop()
 
     def events(self):
         for event in pygame.event.get():
@@ -59,11 +69,11 @@ class Game:
         self.obstacle_manager.update(self)
         self.power_up_manager.update(self)
         self.update_score()
-
+        
     def update_score(self):
         self.score += 1
         if self.score % 100 == 0:
-            self.game_speed += 2
+            self.game_speed += 3
         self.update_high_score()
 
     def update_high_score(self):
@@ -94,12 +104,19 @@ class Game:
     def draw_score(self):
         text_utils(f"Score: {self.score}",
                    self.screen,
+                   text_color=(0, 0, 0),
                    pos_x_center=970,
-                   pos_y_center=100
+                   pos_y_center=50
+                   )
+        text_utils(f"High score: {self.high_score}",
+                   self.screen,
+                   text_color=(0, 0, 0),
+                   pos_x_center=945,
+                   pos_y_center=80
                    )
 
     def draw_power_up_time(self):
-        if self.player.has_power_up:
+        if self.player.type == SHIELD_TYPE:
             time_to_show = round((self.player.power_up_time - pygame.time.get_ticks()) / 1000, 1)
             if time_to_show >= 0:
                 text_utils(
@@ -131,7 +148,7 @@ class Game:
             text_utils("Press any key to restart",
                    self.screen,
                    pos_x_center=half_screen_width,
-                   pos_y_center=half_screen_height + 250
+                   pos_y_center=half_screen_height + 240
                    )
             text_utils(f"Score: {self.score}",
                    self.screen,
@@ -146,7 +163,13 @@ class Game:
             text_utils(f"High score: {self.high_score}",
                    self.screen,
                    pos_x_center=half_screen_width,
-                   pos_y_center=half_screen_height + 200
+                   pos_y_center=half_screen_height + 190
+                   )
+            text_utils("Develoment by: Kacterine Martínez",
+                   self.screen,
+                   font_size=14,
+                   pos_x_center=170,
+                   pos_y_center=half_screen_height + 280
                    )
         pygame.display.update()
         self.handle_events_on_menu()
